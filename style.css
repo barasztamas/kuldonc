@@ -1,0 +1,29 @@
+#jatek {
+    border-collapse: collapse;
+}
+
+#jatek td {
+    width: 40px;
+    height: 40px;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    padding: 0px;
+}
+
+#jatek td.line {
+    border-width: 3px;
+}
+
+#jatek td.top {
+    border-top-width: 1px;
+}
+#jatek td.bottom {
+    border-bottom-width: 1px;
+}
+#jatek td.left {
+    border-left-width: 1px;
+}
+#jatek td.right {
+    border-right-width: 1px;
+}
