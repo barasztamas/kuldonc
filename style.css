@@ -1,29 +1,42 @@
-#jatek {
+table {
     border-collapse: collapse;
 }
 
-#jatek td {
+#board td {
     width: 40px;
     height: 40px;
     border-color: black;
     border-width: 1px;
     border-style: solid;
     padding: 0px;
+    text-align: center;
 }
 
-#jatek td.line {
+#board td.line {
     border-width: 3px;
 }
 
-#jatek td.top {
+#board td.top {
     border-top-width: 1px;
 }
-#jatek td.bottom {
+#board td.bottom {
     border-bottom-width: 1px;
 }
-#jatek td.left {
+#board td.left {
     border-left-width: 1px;
 }
-#jatek td.right {
+#board td.right {
     border-right-width: 1px;
 }
+
+td.c1   {background-color: indianred;}
+td.c2   {background-color: lightseagreen;}
+td.c3   {background-color: goldenrod;}
+td.c4   {background-color: blueviolet;}
+td.c5   {background-color: lawngreen;}
+td.c6   {background-color: crimson;}
+td.c7   {background-color: darkmagenta;}
+td.c8   {background-color: darkolivegreen;}
+td.c9   {background-color: gray;}
+td.c10  {background-color: maroon;}
+td.c11  {background-color: navy;}
