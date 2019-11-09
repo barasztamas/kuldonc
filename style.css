@@ -1,42 +1,50 @@
+div {
+    text-align: center;
+}
 table {
     border-collapse: collapse;
+    display: inline-block;
+}
+
+#success {
+    color: red;
 }
 
 #board td {
     width: 40px;
     height: 40px;
     border-color: black;
-    border-width: 1px;
-    border-style: solid;
+    border-width: 2px;
+    border-style: dotted;
     padding: 0px;
     text-align: center;
 }
 
 #board td.line {
-    border-width: 3px;
+    border-style: solid;
 }
 
 #board td.top {
-    border-top-width: 1px;
+    border-top-style: dotted;
 }
 #board td.bottom {
-    border-bottom-width: 1px;
+    border-bottom-style: dotted;
 }
 #board td.left {
-    border-left-width: 1px;
+    border-left-style: dotted;
 }
 #board td.right {
-    border-right-width: 1px;
+    border-right-style: dotted;
 }
 
 td.c1   {background-color: indianred;}
 td.c2   {background-color: lightseagreen;}
 td.c3   {background-color: goldenrod;}
-td.c4   {background-color: blueviolet;}
+td.c4   {background-color: blueviolet; color: white;}
 td.c5   {background-color: lawngreen;}
 td.c6   {background-color: crimson;}
-td.c7   {background-color: darkmagenta;}
-td.c8   {background-color: darkolivegreen;}
-td.c9   {background-color: gray;}
-td.c10  {background-color: maroon;}
-td.c11  {background-color: navy;}
+td.c7   {background-color: darkmagenta; color: white;}
+td.c8   {background-color: darkolivegreen; color: white;}
+td.c9   {background-color: gray; color: white;}
+td.c10  {background-color: maroon; color: white;}
+td.c11  {background-color: navy; color: white;}

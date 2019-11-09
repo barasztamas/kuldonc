@@ -8,7 +8,7 @@ export class Board {
     constructor(size, castles){
         /** @type {Coordinates|false} */
         this._actual = false;
-        /** @type {Square[][]} */
+        /** @type {Square[][]|false} */
         this.squares=[];
         for (let rownum = 0; rownum < size; rownum++) {
             /** @type {Square[]} */
@@ -42,6 +42,9 @@ export class Board {
      * @param  {Number} color
      */
     removeLine(color) {
+        if (this.actual && this.getCell(this.actual).color===color) {
+            this.actual=false;
+        }
         for (let i = 0; i < this.squares.length; i++) {
             /** @type {Square[]} */
             const row = this.squares[i];
@@ -59,7 +62,7 @@ export class Board {
      */
     set actual(coordinates) {
         if (this._actual) {
-            this.squares[this._actual.row][this._actual.col].actual = false;
+            this.getCell(this._actual).actual = false;
         }
         if (coordinates) {
             this.squares[coordinates.row][coordinates.col].actual = true;
@@ -89,10 +92,11 @@ export class Board {
      * @param  {Coordinates} a
      * @param  {Coordinates} b
      */
-     connect(a,b){
+    connect(a,b){
         let success = false;
         const cellA = this.getCell(a);
         const cellB = this.getCell(b);
+        const actualCell = this.getCell(this.actual);
         if          (a.row === b.row   && a.col === b.col+1) {
             cellA.left=true;
             cellB.right=true;
@@ -111,9 +115,68 @@ export class Board {
             success=true;
         }
         if (success) {
-            cellA.color ? cellB.color=cellA.color : cellA.color=cellB.color;
+            if (cellA===actualCell) {
+                cellB.color = cellA.color;
+                this.actual = b;
+            } else if (cellB===actualCell) {
+                cellA.color = cellB.color;
+                this.actual = a;
+            }
         }
         return success;
+    }
+
+    /**
+     * @param  {Coordinates} a
+     * @param  {Coordinates} b
+     */
+    isConnected(a,b){
+        const cellA = this.getCell(a);
+        const cellB = this.getCell(b);
+        return (a.row === b.row     && a.col === b.col+1    && cellA.left   && cellB.right  )
+            || (a.row === b.row     && a.col === b.col-1    && cellA.right  && cellB.left   )
+            || (a.row === b.row+1   && a.col === b.col      && cellA.top    && cellB.bottom )
+            || (a.row === b.row-1   && a.col === b.col      && cellA.bottom && cellB.top    )
+    }
+
+    
+    /**
+     * @param  {Coordinates} a
+     * @param  {Coordinates} b
+     */
+    disconnect(a,b){
+        let success = false;
+        if (this.isConnected(a,b)) {
+            const cellA = this.getCell(a);
+            const cellB = this.getCell(b);
+            const actualCell = this.getCell(this.actual);
+            if          (a.row === b.row   && a.col === b.col+1) {
+                cellA.left=false;
+                cellB.right=false;
+            } else if   (a.row === b.row   && a.col === b.col-1) {
+                cellA.right=false;
+                cellB.left=false;
+            } else if   (a.row === b.row+1 && a.col === b.col) {
+                cellA.top=false;
+                cellB.bottom=false;
+            } else if   (a.row === b.row-1 && a.col === b.col) {
+                cellA.bottom=false;
+                cellB.top=false;
+            }
+            if (cellA===actualCell) {
+                cellA.color = 0;
+                this.actual = b;
+            } else if (cellB===actualCell) {
+                cellB.color = 0;
+                this.actual = a;
+            }
+            success = true;
+        }
+        return success;
+    }
+
+    isFull() {
+        return this.squares.length && this.squares.every(row => { return row.every(cell => {return !!cell.color})});
     }
 }
 
@@ -121,7 +184,7 @@ export class Square {
     /**
      * @param  {Number} castle=0
      */
-    constructor(castle = 0){
+     constructor(castle = 0){
         this.castle = castle;
         this.color = 0;
         this.actual = false;

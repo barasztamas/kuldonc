@@ -1,3 +1,9 @@
+/**
+ * @param  {Element} parent
+ * @param  {String} type
+ * @param  {String} selector
+ * @param  {Function} fn
+ */
 export function delegate(parent, type, selector, fn) {
 
     function delegatedFunction(e) {
@@ -7,7 +13,7 @@ export function delegate(parent, type, selector, fn) {
         const closestElement = sourceElement.closest(selector);
         if (handlerElement.contains(closestElement)) {
             const delegatedElement = closestElement;
-            fn.call(delegatedElement, e)
+            fn.call(delegatedElement, e);
         }
     }
 
@@ -27,8 +33,8 @@ export class Coordinates{
 
 /**
  * @param  {HTMLTableDataCellElement} td
- * @returns {Coordinates} a
+ * @returns {Coordinates}
  */
 export function tdLocation(td) {
-    return new Coordinates (td.cellIndex, td.parentNode.rowIndex);
+    return new Coordinates (td.parentNode.rowIndex, td.cellIndex);
 }

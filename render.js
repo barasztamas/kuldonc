@@ -1,5 +1,6 @@
 import { Square,Board } from "./board.js";
 import { boardTable, mainBoard } from "./index.js";
+const successText = document.querySelector("#success")
 
 /**
  * @param {Square} square
@@ -25,8 +26,8 @@ function renderBoard(board) {
 }
 
 export function render() {
-    console.log(!!mainBoard, mainBoard, boardTable);
     if (mainBoard) {
         boardTable.innerHTML = renderBoard(mainBoard);
+        successText.innerHTML = !mainBoard.actual && mainBoard.isFull() ? "Adj' Isten egészségére!" : "";
     }
 }
