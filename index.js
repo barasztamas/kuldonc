@@ -74,30 +74,31 @@ window.addEventListener("mouseup", windowMouseUp);
 /**
  * @param  {Event} event
  */
-function tdMouseOut(event) {
+function tdMouseOver(event) {
     if (board.actual) {
-        const fromTd = event.target.closest("#board td");
-        if (fromTd) {
-            const fromTdCoordinates = tdLocation(fromTd);
-            if (fromTdCoordinates.equals(board.actual)) {
-                const toTd = event.relatedTarget.closest("#board td");
-                if (toTd) {
-                    const toTdCoordinates = tdLocation(toTd);
-                    const toCell = board.getCell(toTdCoordinates);
-                    if (
-                        !board.disconnect(fromTdCoordinates, toTdCoordinates) 
-                        && toCell.color===0
-                        && (toCell.castle===0 || toCell.castle===board.getCell(fromTdCoordinates).color)
-                    ) {
-                        board.connect(fromTdCoordinates, toTdCoordinates);
-                    }
+        const toTd = event.target.closest("#board td");
+        if (toTd) {
+            const toCoordinates = tdLocation(toTd);
+            const toCell = board.getCell(toCoordinates);
+            if (toCoordinates.isNeighbour(board.actual)) {
+                const fromTd = event.relatedTarget ? event.relatedTarget.closest("#board td") : null;
+                if (fromTd
+                    && tdLocation(fromTd).equals(board.actual)
+                    && board.disconnect(board.actual, toCoordinates) 
+                ) {
+                    renderMain();
+                } else if(
+                    toCell.color===0
+                    && (toCell.castle===0 || toCell.castle===board.getCell(board.actual).color)
+                ) {
+                    board.connect(board.actual, toCoordinates);
                     renderMain();
                 }
             }
         }
     }
 }
-delegate(boardTable, "mouseout", "td", tdMouseOut);
+delegate(boardTable, "mouseover", "td", tdMouseOver);
 
 function saveButtonClick() {
     if (difficulty) {
@@ -139,7 +140,6 @@ function loadButtonClick() {
 loadButton.addEventListener("click", loadButtonClick);
 
 function checkSaveButtonClick() {
-    console.log(this.id);
     showCheckSave(false);
     if (this.id==="overwrite") {
         saveBoard(difficulty, board);

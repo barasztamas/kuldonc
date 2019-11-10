@@ -138,7 +138,6 @@ export class Board {
             || (a.row === b.row-1   && a.col === b.col      && cellA.bottom && cellB.top    )
     }
 
-    
     /**
      * @param  {Coordinates} a
      * @param  {Coordinates} b

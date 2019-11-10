@@ -36,6 +36,13 @@ export class Coordinates{
     equals(other){
         return this.row===other.row && this.col===other.col;
     }
+    /**
+     * @param  {Coordinates} other
+     */
+    isNeighbour(other){
+        return (Math.abs(this.row-other.row)+Math.abs(this.col-other.col))===1;
+    }
+
 }
 
 /**
