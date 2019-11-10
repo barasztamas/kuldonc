@@ -29,6 +29,13 @@ export class Coordinates{
         this.row=row;
         this.col=col;
     }
+    
+    /**
+     * @param  {Coordinates} other
+     */
+    equals(other){
+        return this.row===other.row && this.col===other.col;
+    }
 }
 
 /**

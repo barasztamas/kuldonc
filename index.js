@@ -1,16 +1,20 @@
 import { delegate, Coordinates, tdLocation } from "./utils.js";
-import { render } from "./render.js";
+import { renderBoard } from "./render.js";
 import { Board, Square } from "./board.js";
 import * as settings from "./settings.js";
 import { saveBoard, loadBoard } from "./storage.js";
 
 export const boardTable = document.querySelector("table#board");
-export let mainBoard = new Board(0);
+export let board = new Board(0);
 
 const difficultyButtons =document.querySelector("#difficulty");
+const storageDiv = document.querySelector("#storage")
 const saveButton = document.querySelector("#save");
 const loadButton = document.querySelector("#load");
 const checkSave = document.querySelector("#checkSave");
+const actualPreview = document.querySelector("#actualPreview");
+const savedPreview = document.querySelector("#savedPreview");
+const successText = document.querySelector("#success");
 let difficulty = "";
 
 /**
@@ -18,8 +22,9 @@ let difficulty = "";
  */
 function difficultyButtonClick() {
     difficulty = this.id;
-    mainBoard = new Board(settings.size[this.id], settings.castles[this.id]);
-    render();
+    board = new Board(settings.size[this.id], settings.castles[this.id]);
+    renderMain();
+    showCheckSave(false);
 }
 delegate(difficultyButtons, "click", "button", difficultyButtonClick);
 
@@ -27,21 +32,21 @@ delegate(difficultyButtons, "click", "button", difficultyButtonClick);
  * @param  {Event} event
  */
 function tdMouseDown(event) {
-    if (!mainBoard.actual) {
+    if (!board.actual) {
         if (event.button===0) {
             const tdCoordinates = tdLocation(this);
-            const cell = mainBoard.getCell(tdCoordinates);
-            mainBoard.removeLine(cell.castle);
+            const cell = board.getCell(tdCoordinates);
+            board.removeLine(cell.castle);
             if (cell.castle) {
-                mainBoard.actual = tdCoordinates;
+                board.actual = tdCoordinates;
                 cell.color = cell.castle;
-                render();
+                renderMain();
             }
         } else if (event.button===2) {
             const tdCoordinates = tdLocation(this);
-            const cell = mainBoard.getCell(tdCoordinates);
-            mainBoard.removeLine(cell.color);
-            render();
+            const cell = board.getCell(tdCoordinates);
+            board.removeLine(cell.color);
+            renderMain();
         }
     }
 }
@@ -52,16 +57,16 @@ boardTable.addEventListener("contextmenu", event => {event.preventDefault()});
  * @param  {Event} event
  */
 function windowMouseUp(event) {
-    if (mainBoard.actual && event.button===0) {
-        const actualCell = mainBoard.getCell(mainBoard.actual);
+    if (board.actual && event.button===0) {
+        const actualCell = board.getCell(board.actual);
         if (
             actualCell.color!==actualCell.castle || 
             !(actualCell.left||actualCell.right||actualCell.top||actualCell.bottom)
         ) {
-            mainBoard.removeLine(actualCell.color);
+            board.removeLine(actualCell.color);
         }
-        mainBoard.actual = false;
-        render();
+        board.actual = false;
+        renderMain();
     }
 }
 window.addEventListener("mouseup", windowMouseUp);
@@ -70,23 +75,23 @@ window.addEventListener("mouseup", windowMouseUp);
  * @param  {Event} event
  */
 function tdMouseOut(event) {
-    if (mainBoard.actual) {
+    if (board.actual) {
         const fromTd = event.target.closest("#board td");
         if (fromTd) {
             const fromTdCoordinates = tdLocation(fromTd);
-            if (fromTdCoordinates.row===mainBoard.actual.row && fromTdCoordinates.col===mainBoard.actual.col) {
+            if (fromTdCoordinates.equals(board.actual)) {
                 const toTd = event.relatedTarget.closest("#board td");
                 if (toTd) {
                     const toTdCoordinates = tdLocation(toTd);
-                    const toCell = mainBoard.getCell(toTdCoordinates);
+                    const toCell = board.getCell(toTdCoordinates);
                     if (
-                        !mainBoard.disconnect(fromTdCoordinates, toTdCoordinates) 
+                        !board.disconnect(fromTdCoordinates, toTdCoordinates) 
                         && toCell.color===0
-                        && (toCell.castle===0 || toCell.castle===mainBoard.getCell(fromTdCoordinates).color)
+                        && (toCell.castle===0 || toCell.castle===board.getCell(fromTdCoordinates).color)
                     ) {
-                        mainBoard.connect(fromTdCoordinates, toTdCoordinates);
+                        board.connect(fromTdCoordinates, toTdCoordinates);
                     }
-                    render();
+                    renderMain();
                 }
             }
         }
@@ -96,11 +101,15 @@ delegate(boardTable, "mouseout", "td", tdMouseOut);
 
 function saveButtonClick() {
     if (difficulty) {
-        const loadedBoard = loadBoard(difficulty);
-        if (loadedBoard) {
+        const loadedSquares = loadBoard(difficulty);
+        if (loadedSquares) {
+            const loadedBoard=new Board(0);
+            loadedBoard.squares=loadedSquares;
+            renderBoard(board, actualPreview);
+            renderBoard(loadedBoard, savedPreview);
             showCheckSave();
         } else {
-            saveBoard(difficulty, mainBoard);
+            saveBoard(difficulty, board);
         }
     }
 }
@@ -108,16 +117,22 @@ saveButton.addEventListener("click", saveButtonClick);
 
 function showCheckSave(show=true) {
     checkSave.hidden = !show;
-    difficultyButtons.hidden = show;
     boardTable.hidden = show;
+    storageDiv.hidden = show;
+    successText.hidden = show;
+    boardTable.parentNode.hidden = show;
+    if (!show) {
+        renderBoard(null, actualPreview);
+        renderBoard(null, savedPreview);
+    }
 }
 
 function loadButtonClick() {
     if (difficulty) {
-        const loadedBoard = loadBoard(difficulty);
-        if (loadedBoard) {
-            mainBoard.squares = loadedBoard;
-            render();
+        const loadedSquares = loadBoard(difficulty);
+        if (loadedSquares) {
+            board.squares = loadedSquares;
+            renderMain();
         }
     }
 }
@@ -127,8 +142,12 @@ function checkSaveButtonClick() {
     console.log(this.id);
     showCheckSave(false);
     if (this.id==="overwrite") {
-        saveBoard(difficulty, mainBoard);
+        saveBoard(difficulty, board);
     }
 }
 delegate(checkSave, "click", "button", checkSaveButtonClick);
 
+function renderMain() {
+    renderBoard(board, boardTable);
+    successText.innerHTML = !!board && !board.actual && board.isFull() ? "Adj' Isten egészségére!" : "";
+}

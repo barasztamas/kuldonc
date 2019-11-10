@@ -96,7 +96,6 @@ export class Board {
         let success = false;
         const cellA = this.getCell(a);
         const cellB = this.getCell(b);
-        const actualCell = this.getCell(this.actual);
         if          (a.row === b.row   && a.col === b.col+1) {
             cellA.left=true;
             cellB.right=true;
@@ -115,10 +114,10 @@ export class Board {
             success=true;
         }
         if (success) {
-            if (cellA===actualCell) {
+            if (a.equals(this.actual)) {
                 cellB.color = cellA.color;
                 this.actual = b;
-            } else if (cellB===actualCell) {
+            } else if (b.equals(this.actual)) {
                 cellA.color = cellB.color;
                 this.actual = a;
             }
@@ -149,7 +148,6 @@ export class Board {
         if (this.isConnected(a,b)) {
             const cellA = this.getCell(a);
             const cellB = this.getCell(b);
-            const actualCell = this.getCell(this.actual);
             if          (a.row === b.row   && a.col === b.col+1) {
                 cellA.left=false;
                 cellB.right=false;
@@ -163,10 +161,10 @@ export class Board {
                 cellA.bottom=false;
                 cellB.top=false;
             }
-            if (cellA===actualCell) {
+            if (a.equals(this.actual)) {
                 cellA.color = 0;
                 this.actual = b;
-            } else if (cellB===actualCell) {
+            } else if (b.equals(this.actual)) {
                 cellB.color = 0;
                 this.actual = a;
             }
