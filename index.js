@@ -22,9 +22,10 @@ let difficulty = "";
  */
 function difficultyButtonClick() {
     difficulty = this.id;
-    board = new Board(settings.size[this.id], settings.castles[this.id]);
+    board = new Board(settings.size[difficulty], settings.castles[difficulty]);
     renderMain();
     showCheckSave(false);
+    loadButton.disabled = !loadBoard(difficulty);
 }
 delegate(difficultyButtons, "click", "button", difficultyButtonClick);
 
@@ -111,6 +112,7 @@ function saveButtonClick() {
             showCheckSave();
         } else {
             saveBoard(difficulty, board);
+            loadButton.disabled = false;
         }
     }
 }
@@ -143,6 +145,7 @@ function checkSaveButtonClick() {
     showCheckSave(false);
     if (this.id==="overwrite") {
         saveBoard(difficulty, board);
+        loadButton.disabled = false;
     }
 }
 delegate(checkSave, "click", "button", checkSaveButtonClick);
