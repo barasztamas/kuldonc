@@ -2,16 +2,22 @@ import { delegate, Coordinates, tdLocation } from "./utils.js";
 import { render } from "./render.js";
 import { Board, Square } from "./board.js";
 import * as settings from "./settings.js";
+import { saveBoard, loadBoard } from "./storage.js";
 
 export const boardTable = document.querySelector("table#board");
 export let mainBoard = new Board(0);
 
 const difficultyButtons =document.querySelector("#difficulty");
+const saveButton = document.querySelector("#save");
+const loadButton = document.querySelector("#load");
+const checkSave = document.querySelector("#checkSave");
+let difficulty = "";
 
 /**
  * @param  {HTMLButtonElement} button
  */
 function difficultyButtonClick() {
+    difficulty = this.id;
     mainBoard = new Board(settings.size[this.id], settings.castles[this.id]);
     render();
 }
@@ -87,3 +93,42 @@ function tdMouseOut(event) {
     }
 }
 delegate(boardTable, "mouseout", "td", tdMouseOut);
+
+function saveButtonClick() {
+    if (difficulty) {
+        const loadedBoard = loadBoard(difficulty);
+        if (loadedBoard) {
+            showCheckSave();
+        } else {
+            saveBoard(difficulty, mainBoard);
+        }
+    }
+}
+saveButton.addEventListener("click", saveButtonClick);
+
+function showCheckSave(show=true) {
+    checkSave.hidden = !show;
+    difficultyButtons.hidden = show;
+    boardTable.hidden = show;
+}
+
+function loadButtonClick() {
+    if (difficulty) {
+        const loadedBoard = loadBoard(difficulty);
+        if (loadedBoard) {
+            mainBoard.squares = loadedBoard;
+            render();
+        }
+    }
+}
+loadButton.addEventListener("click", loadButtonClick);
+
+function checkSaveButtonClick() {
+    console.log(this.id);
+    showCheckSave(false);
+    if (this.id==="overwrite") {
+        saveBoard(difficulty, mainBoard);
+    }
+}
+delegate(checkSave, "click", "button", checkSaveButtonClick);
+
