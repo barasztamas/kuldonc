@@ -38,7 +38,7 @@ function tdMouseDown(event) {
             const tdCoordinates = tdLocation(this);
             const cell = board.getCell(tdCoordinates);
             board.removeLine(cell.castle);
-            if (cell.castle) {
+            if (cell.castle && !cell.color) {
                 board.actual = tdCoordinates;
                 cell.color = cell.castle;
                 renderMain();
