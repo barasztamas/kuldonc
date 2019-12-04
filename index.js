@@ -81,20 +81,19 @@ function tdMouseOver(event) {
         if (toTd) {
             const toCoordinates = tdLocation(toTd);
             const toCell = board.getCell(toCoordinates);
-            if (toCoordinates.isNeighbour(board.actual)) {
-                const fromTd = event.relatedTarget ? event.relatedTarget.closest("#board td") : null;
-                if (fromTd
-                    && tdLocation(fromTd).equals(board.actual)
-                    && board.disconnect(board.actual, toCoordinates) 
-                ) {
-                    renderMain();
-                } else if(
-                    toCell.color===0
-                    && (toCell.castle===0 || toCell.castle===board.getCell(board.actual).color)
-                ) {
-                    board.connect(board.actual, toCoordinates);
-                    renderMain();
-                }
+            if (    
+                    (
+                        board.isConnected(toCoordinates, board.actual)
+                        && board.connect(board.actual, toCoordinates, false)
+                    ) || (
+                        toCell.color===0
+                        && toCoordinates.isNeighbour(board.actual)
+                        && (toCell.castle===0 || toCell.castle===board.getCell(board.actual).color)
+                        && board.connect(board.actual, toCoordinates, true) 
+                    )
+                )
+            {
+                renderMain();
             }
         }
     }

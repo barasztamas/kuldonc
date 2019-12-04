@@ -25,18 +25,6 @@ export class Board {
                 });
             }
         }
-            // this.squares = squares;
-            // for (let i = 0; i < this.squares.length; i++) {
-            //     /** @type {Square[]} */
-            //     const row = this.squares[i];
-            //     for (let j = 0; j < row.length; j++) {
-            //         /** @type {Square} */
-            //         const square = row[j];
-            //         if (square.actual) {
-            //             this.actual = new Coordinates(i,j);
-            //         }
-            //     }
-            // }
     }
     /**
      * @param  {Number} color
@@ -81,45 +69,49 @@ export class Board {
         return this.squares[coordinates.row][coordinates.col];
     }
     /**
-     * @param  {Coordinates} coordinates
-     * @param  {Square} square
-     */
-    setCell(coordinates, square) {
-        this.squares[coordinates.row][coordinates.col] = square;
-    }
-    
-    /**
      * @param  {Coordinates} a
      * @param  {Coordinates} b
+     * @param  {boolean} toConnect
      */
-    connect(a,b){
+    connect(a,b,toConnect=true){
         let success = false;
         const cellA = this.getCell(a);
         const cellB = this.getCell(b);
         if          (a.row === b.row   && a.col === b.col+1) {
-            cellA.left=true;
-            cellB.right=true;
+            cellA.left=toConnect;
+            cellB.right=toConnect;
             success=true;
         } else if   (a.row === b.row   && a.col === b.col-1) {
-            cellA.right=true;
-            cellB.left=true;
+            cellA.right=toConnect;
+            cellB.left=toConnect;
             success=true;
         } else if   (a.row === b.row+1 && a.col === b.col) {
-            cellA.top=true;
-            cellB.bottom=true;
+            cellA.top=toConnect;
+            cellB.bottom=toConnect;
             success=true;
         } else if   (a.row === b.row-1 && a.col === b.col) {
-            cellA.bottom=true;
-            cellB.top=true;
+            cellA.bottom=toConnect;
+            cellB.top=toConnect;
             success=true;
         }
         if (success) {
-            if (a.equals(this.actual)) {
-                cellB.color = cellA.color;
-                this.actual = b;
-            } else if (b.equals(this.actual)) {
-                cellA.color = cellB.color;
-                this.actual = a;
+            if (toConnect) {
+                if (a.equals(this.actual)) {
+                    cellB.color = cellA.color;
+                    this.actual = b;
+                } else if (b.equals(this.actual)) {
+                    cellA.color = cellB.color;
+                    this.actual = a;
+                }
+            }
+            if (!toConnect) {
+                    if (a.equals(this.actual)) {
+                    cellA.color = 0;
+                    this.actual = b;
+                } else if (b.equals(this.actual)) {
+                    cellB.color = 0;
+                    this.actual = a;
+                }
             }
         }
         return success;
@@ -136,40 +128,6 @@ export class Board {
             || (a.row === b.row     && a.col === b.col-1    && cellA.right  && cellB.left   )
             || (a.row === b.row+1   && a.col === b.col      && cellA.top    && cellB.bottom )
             || (a.row === b.row-1   && a.col === b.col      && cellA.bottom && cellB.top    )
-    }
-
-    /**
-     * @param  {Coordinates} a
-     * @param  {Coordinates} b
-     */
-    disconnect(a,b){
-        let success = false;
-        if (this.isConnected(a,b)) {
-            const cellA = this.getCell(a);
-            const cellB = this.getCell(b);
-            if          (a.row === b.row   && a.col === b.col+1) {
-                cellA.left=false;
-                cellB.right=false;
-            } else if   (a.row === b.row   && a.col === b.col-1) {
-                cellA.right=false;
-                cellB.left=false;
-            } else if   (a.row === b.row+1 && a.col === b.col) {
-                cellA.top=false;
-                cellB.bottom=false;
-            } else if   (a.row === b.row-1 && a.col === b.col) {
-                cellA.bottom=false;
-                cellB.top=false;
-            }
-            if (a.equals(this.actual)) {
-                cellA.color = 0;
-                this.actual = b;
-            } else if (b.equals(this.actual)) {
-                cellB.color = 0;
-                this.actual = a;
-            }
-            success = true;
-        }
-        return success;
     }
 
     isFull() {
