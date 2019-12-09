@@ -34,9 +34,11 @@ delegate(difficultyButtons, "click", "button", difficultyButtonClick);
  */
 function tdMouseDown(event) {
     if (!board.actual) {
+        /** @type {Coordinates} */
+        const tdCoordinates = tdLocation(this);
+        /** @type {Square} */
+        const cell = board.getCell(tdCoordinates);
         if (event.button===0) {
-            const tdCoordinates = tdLocation(this);
-            const cell = board.getCell(tdCoordinates);
             board.removeLine(cell.castle);
             if (cell.castle && !cell.color) {
                 board.actual = tdCoordinates;
@@ -44,8 +46,6 @@ function tdMouseDown(event) {
                 renderMain();
             }
         } else if (event.button===2) {
-            const tdCoordinates = tdLocation(this);
-            const cell = board.getCell(tdCoordinates);
             board.removeLine(cell.color);
             renderMain();
         }

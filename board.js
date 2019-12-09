@@ -74,27 +74,27 @@ export class Board {
      * @param  {boolean} toConnect
      */
     connect(a,b,toConnect=true){
-        let success = false;
+        let neighbours = false;
         const cellA = this.getCell(a);
         const cellB = this.getCell(b);
         if          (a.row === b.row   && a.col === b.col+1) {
             cellA.left=toConnect;
             cellB.right=toConnect;
-            success=true;
+            neighbours=true;
         } else if   (a.row === b.row   && a.col === b.col-1) {
             cellA.right=toConnect;
             cellB.left=toConnect;
-            success=true;
+            neighbours=true;
         } else if   (a.row === b.row+1 && a.col === b.col) {
             cellA.top=toConnect;
             cellB.bottom=toConnect;
-            success=true;
+            neighbours=true;
         } else if   (a.row === b.row-1 && a.col === b.col) {
             cellA.bottom=toConnect;
             cellB.top=toConnect;
-            success=true;
+            neighbours=true;
         }
-        if (success) {
+        if (neighbours) {
             if (toConnect) {
                 if (a.equals(this.actual)) {
                     cellB.color = cellA.color;
@@ -114,7 +114,7 @@ export class Board {
                 }
             }
         }
-        return success;
+        return neighbours;
     }
 
     /**
@@ -131,7 +131,8 @@ export class Board {
     }
 
     isFull() {
-        return this.squares.length && this.squares.every(row => { return row.every(cell => {return !!cell.color})});
+        return this.squares.length &&
+            this.squares.every(row => { return row.every(cell => {return !!cell.color})});
     }
 }
 

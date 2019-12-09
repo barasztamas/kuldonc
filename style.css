@@ -1,9 +1,6 @@
+/*general alignment*/
 div {
     text-align: center;
-}
-table {
-    border-collapse: collapse;
-    display: inline-block;
 }
 div.column {
     float: left;
@@ -16,11 +13,15 @@ div.left {
 div.right {
     text-align: right;
 }
-
 #success {
     color: red;
 }
 
+/*board and preview tables*/
+table {
+    border-collapse: collapse;
+    display: inline-block;
+}
 #board td {
     width: 40px;
     height: 40px;
@@ -30,12 +31,10 @@ div.right {
     padding: 0px;
     text-align: center;
 }
-
 table.preview{
     border-width: 1px;
     border-style: solid;
 }
-
 table.preview td{
     width: 20px;
     height: 20px;
@@ -46,10 +45,10 @@ table.preview td{
     font-size: 0px;
 }
 
+/*lines separated by solid border*/
 #board td.line {
     border-style: solid;
 }
-
 #board td.top {
     border-top-style: dotted;
 }
@@ -63,14 +62,15 @@ table.preview td{
     border-right-style: dotted;
 }
 
+/*line colors*/
 td.c1   {background-color: indianred;}
 td.c2   {background-color: lightseagreen;}
 td.c3   {background-color: goldenrod;}
-td.c4   {background-color: blueviolet; color: white;}
+td.c4   {background-color: blueviolet;      color: white;}
 td.c5   {background-color: lawngreen;}
 td.c6   {background-color: crimson;}
-td.c7   {background-color: darkmagenta; color: white;}
-td.c8   {background-color: darkolivegreen; color: white;}
-td.c9   {background-color: gray; color: white;}
-td.c10  {background-color: maroon; color: white;}
-td.c11  {background-color: navy; color: white;}
+td.c7   {background-color: darkmagenta;     color: white;}
+td.c8   {background-color: darkolivegreen;  color: white;}
+td.c9   {background-color: gray;            color: white;}
+td.c10  {background-color: maroon;          color: white;}
+td.c11  {background-color: navy;            color: white;}
