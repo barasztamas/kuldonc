@@ -1,4 +1,4 @@
-/*general alignment*/
+/*general*/
 div {
     text-align: center;
 }
@@ -22,14 +22,18 @@ table {
     border-collapse: collapse;
     display: inline-block;
 }
+td {
+    background-color: lightgrey;
+}
 #board td {
     width: 40px;
     height: 40px;
-    border-color: black;
-    border-width: 2px;
-    border-style: dotted;
+    border-color: white;
+    border-width: 1px;
+    border-style: solid;
     padding: 0px;
     text-align: center;
+    border-radius: 10px;
 }
 table.preview{
     border-width: 1px;
@@ -45,21 +49,32 @@ table.preview td{
     font-size: 0px;
 }
 
-/*lines separated by solid border*/
+/*squares in lines*/
 #board td.line {
-    border-style: solid;
+    border-radius: 20px;
+}
+#board td.actual, #board td.castle {
+    border-radius: 10px;
 }
 #board td.top {
-    border-top-style: dotted;
+    border-top-color: transparent;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 #board td.bottom {
-    border-bottom-style: dotted;
+    border-bottom-color: transparent;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 #board td.left {
-    border-left-style: dotted;
+    border-left-color: transparent;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 #board td.right {
-    border-right-style: dotted;
+    border-right-color: transparent;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 /*line colors*/
