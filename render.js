@@ -6,12 +6,14 @@ import { Square,Board } from "./board.js";
  */
 function renderSquare(square) {
     return `<td class="
-        ${square.color  ? `c${square.color} ${square.actual ? "actual" : "line"}` : ""}
-        ${square.left   ? "left"                : ""}
-        ${square.right  ? "right"               : ""}
-        ${square.top    ? "top"                 : ""}
-        ${square.bottom ? "bottom"              : ""}
-    ">  ${square.castle ? square.castle         : ""}</td>`;
+        ${square.color  ? `c${square.color} line`   : ""}
+        ${square.actual ? "actual"                  : ""}
+        ${square.left   ? "left"                    : ""}
+        ${square.right  ? "right"                   : ""}
+        ${square.top    ? "top"                     : ""}
+        ${square.bottom ? "bottom"                  : ""}
+        ${square.castle ? "castle"                  : ""}
+    ">  ${square.castle ? square.castle             : ""}</td>`;
 }
 /**
  * @param {Board} board

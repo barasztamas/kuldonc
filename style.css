@@ -33,7 +33,7 @@ td {
     border-style: solid;
     padding: 0px;
     text-align: center;
-    border-radius: 6px;
+    border-radius: 10px;
 }
 table.preview{
     border-width: 1px;
@@ -49,7 +49,13 @@ table.preview td{
     font-size: 0px;
 }
 
-/*lines separated by solid border*/
+/*squares in lines*/
+#board td.line {
+    border-radius: 20px;
+}
+#board td.actual, #board td.castle {
+    border-radius: 10px;
+}
 #board td.top {
     border-top-color: transparent;
     border-top-left-radius: 0px;

@@ -61,8 +61,11 @@ function windowMouseUp(event) {
     if (board.actual && event.button===0) {
         const actualCell = board.getCell(board.actual);
         if (
-            actualCell.color!==actualCell.castle || 
-            !(actualCell.left||actualCell.right||actualCell.top||actualCell.bottom)
+            !event.target.closest || //mouse outside window
+            !event.target.closest("#board td") || //mouse outside board
+            !board.actual.equals(tdLocation(event.target.closest("#board td"))) || //mouse not over actual cell
+            actualCell.color!==actualCell.castle || //actual cell not a castle
+            !(actualCell.left||actualCell.right||actualCell.top||actualCell.bottom) //actual cell has no connections (is starting castle)
         ) {
             board.removeLine(actualCell.color);
         }
@@ -121,7 +124,6 @@ function showCheckSave(show=true) {
     checkSave.hidden = !show;
     boardTable.hidden = show;
     storageDiv.hidden = show;
-    successText.hidden = show;
     boardTable.parentNode.hidden = show;
     if (!show) {
         renderBoard(null, actualPreview);
@@ -151,5 +153,5 @@ delegate(checkSave, "click", "button", checkSaveButtonClick);
 
 function renderMain() {
     renderBoard(board, boardTable);
-    successText.innerHTML = !!board && !board.actual && board.isFull() ? "Adj' Isten egészségére!" : "";
+    successText.hidden = !board || !!board.actual || !board.isFull();
 }
