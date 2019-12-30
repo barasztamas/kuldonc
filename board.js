@@ -1,4 +1,5 @@
 import { Coordinates } from "./utils.js";
+import { Square } from "./square.js";
 
 export class Board {
     /**
@@ -6,22 +7,22 @@ export class Board {
      * @param  { Coordinates[][] } castles
      */
     constructor(size, castles){
-        /** @type {Coordinates|false} */
-        this._actual = false;
-        /** @type {Square[][]|false} */
+        /** @type {Square} */
+        this._actual = null;
+        /** @type {Square[][]} */
         this.squares=[];
         for (let rownum = 0; rownum < size; rownum++) {
             /** @type {Square[]} */
             const row=[];
             for (let colnum = 0; colnum < size; colnum++) {
-                row.push(new Square());
+                row.push(new Square(rownum, colnum, this));
             }
             this.squares.push(row);
         }
         if (castles) {
             for (let i = 0; i < castles.length; i++) {
                 castles[i].forEach(castle => {
-                    this.getCell(castle).castle = i+1;
+                    this.getSquare(castle).castle = i+1;
                 });
             }
         }
@@ -30,8 +31,8 @@ export class Board {
      * @param  {Number} color
      */
     removeLine(color) {
-        if (this.actual && this.getCell(this.actual).color===color) {
-            this.actual=false;
+        if (this.actual && this.actual.color===color) {
+            this.actual=null;
         }
         for (let i = 0; i < this.squares.length; i++) {
             /** @type {Square[]} */
@@ -40,113 +41,43 @@ export class Board {
                 /** @type {Square} */
                 const square = row[j];
                 if (square.color===color) {
-                    this.squares[i][j] = new Square(square.castle);
+                    this.squares[i][j] = new Square(i, j, this, square.castle);
                 }
             }
         }
     }
     /**
-     * @param  {Coordinates|false} coordinates
+     * @param  {Square|false} square
      */
-    set actual(coordinates) {
+    set actual(square) {
         if (this._actual) {
-            this.getCell(this._actual).actual = false;
+            this._actual.actual = false;
         }
-        if (coordinates) {
-            this.squares[coordinates.row][coordinates.col].actual = true;
+        if (square) {
+            square.actual = true;
+            this._actual = square;
+        } else {
+            this._actual = null;
         }
-        this._actual = coordinates;
     }
     get actual(){
         return this._actual;
     }
     
     /**
-     * @param  {Coordinates} coordinates
+     * @param  {Coordinates | HTMLTableDataCellElement} param
      * @returns {Square}
      */
-    getCell(coordinates) {
-        return this.squares[coordinates.row][coordinates.col];
-    }
-    /**
-     * @param  {Coordinates} a
-     * @param  {Coordinates} b
-     * @param  {boolean} toConnect
-     */
-    connect(a,b,toConnect=true){
-        let neighbours = false;
-        const cellA = this.getCell(a);
-        const cellB = this.getCell(b);
-        if          (a.row === b.row   && a.col === b.col+1) {
-            cellA.left=toConnect;
-            cellB.right=toConnect;
-            neighbours=true;
-        } else if   (a.row === b.row   && a.col === b.col-1) {
-            cellA.right=toConnect;
-            cellB.left=toConnect;
-            neighbours=true;
-        } else if   (a.row === b.row+1 && a.col === b.col) {
-            cellA.top=toConnect;
-            cellB.bottom=toConnect;
-            neighbours=true;
-        } else if   (a.row === b.row-1 && a.col === b.col) {
-            cellA.bottom=toConnect;
-            cellB.top=toConnect;
-            neighbours=true;
+    getSquare(param) {
+        if (param instanceof Coordinates) {
+            return this.squares[param.row][param.col];
+        } else if ("cellIndex" in param) {
+            return this.squares[param.parentNode.rowIndex][param.cellIndex];
         }
-        if (neighbours) {
-            if (toConnect) {
-                if (a.equals(this.actual)) {
-                    cellB.color = cellA.color;
-                    this.actual = b;
-                } else if (b.equals(this.actual)) {
-                    cellA.color = cellB.color;
-                    this.actual = a;
-                }
-            }
-            if (!toConnect) {
-                    if (a.equals(this.actual)) {
-                    cellA.color = 0;
-                    this.actual = b;
-                } else if (b.equals(this.actual)) {
-                    cellB.color = 0;
-                    this.actual = a;
-                }
-            }
-        }
-        return neighbours;
-    }
-
-    /**
-     * @param  {Coordinates} a
-     * @param  {Coordinates} b
-     */
-    isConnected(a,b){
-        const cellA = this.getCell(a);
-        const cellB = this.getCell(b);
-        return (a.row === b.row     && a.col === b.col+1    && cellA.left   && cellB.right  )
-            || (a.row === b.row     && a.col === b.col-1    && cellA.right  && cellB.left   )
-            || (a.row === b.row+1   && a.col === b.col      && cellA.top    && cellB.bottom )
-            || (a.row === b.row-1   && a.col === b.col      && cellA.bottom && cellB.top    )
     }
 
     isFull() {
         return this.squares.length &&
             this.squares.every(row => { return row.every(cell => {return !!cell.color})});
-    }
-}
-
-export class Square {
-    /**
-     * @param  {Number} castle=0
-     */
-     constructor(castle = 0){
-        this.castle = castle;
-        this.color = 0;
-        this.actual = false;
-        this.left = false;
-        this.right = false;
-        this.top = false;
-        this.bottom = false;
     }
 }

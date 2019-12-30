@@ -1,4 +1,5 @@
-import { Square,Board } from "./board.js";
+import { Board } from "./board.js";
+import { Square } from "./square.js";
 
 /**
  * @param {Square} square

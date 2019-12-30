@@ -44,11 +44,3 @@ export class Coordinates{
     }
 
 }
-
-/**
- * @param  {HTMLTableDataCellElement} td
- * @returns {Coordinates}
- */
-export function tdLocation(td) {
-    return new Coordinates (td.parentNode.rowIndex, td.cellIndex);
-}

@@ -1,6 +1,7 @@
-import { delegate, Coordinates, tdLocation } from "./utils.js";
+import { delegate } from "./utils.js";
 import { renderBoard } from "./render.js";
-import { Board, Square } from "./board.js";
+import { Board } from "./board.js";
+import { Square } from "./square.js";
 import * as settings from "./settings.js";
 import { saveBoard, loadBoard } from "./storage.js";
 
@@ -34,14 +35,12 @@ delegate(difficultyButtons, "click", "button", difficultyButtonClick);
  */
 function tdMouseDown(event) {
     if (!board.actual) {
-        /** @type {Coordinates} */
-        const tdCoordinates = tdLocation(this);
         /** @type {Square} */
-        const cell = board.getCell(tdCoordinates);
+        const cell = board.getSquare(this);
         if (event.button===0) {
-            board.removeLine(cell.castle);
-            if (cell.castle && !cell.color) {
-                board.actual = tdCoordinates;
+            if (cell.castle) {
+                board.removeLine(cell.castle);
+                board.actual = cell;
                 cell.color = cell.castle;
                 renderMain();
             }
@@ -59,17 +58,18 @@ boardTable.addEventListener("contextmenu", event => {event.preventDefault()});
  */
 function windowMouseUp(event) {
     if (board.actual && event.button===0) {
-        const actualCell = board.getCell(board.actual);
+        /** @type {Square} */
+        const actualCell = board.actual;
         if (
             !event.target.closest || //mouse outside window
             !event.target.closest("#board td") || //mouse outside board
-            !board.actual.equals(tdLocation(event.target.closest("#board td"))) || //mouse not over actual cell
-            actualCell.color!==actualCell.castle || //actual cell not a castle
+            board.actual !== board.getSquare(event.target.closest("#board td")) || //mouse not over actual cell
+            actualCell.color !== actualCell.castle || //actual cell not a castle
             !(actualCell.left||actualCell.right||actualCell.top||actualCell.bottom) //actual cell has no connections (is starting castle)
         ) {
             board.removeLine(actualCell.color);
-        }
-        board.actual = false;
+        } //otherwise
+        board.actual = null;
         renderMain();
     }
 }
@@ -82,20 +82,22 @@ function tdMouseOver(event) {
     if (board.actual) {
         const toTd = event.target.closest("#board td");
         if (toTd) {
-            const toCoordinates = tdLocation(toTd);
-            const toCell = board.getCell(toCoordinates);
-            if (    
+            const toCell = board.getSquare(toTd);
+            console.log(toCell, board.actual);
+            if (
+                toCell &&
+                (
                     (
-                        board.isConnected(toCoordinates, board.actual)
-                        && board.connect(board.actual, toCoordinates, false)
+                        board.actual.isConnected(toCell)
+                        && board.actual.connect(toCell, false)
                     ) || (
                         toCell.color===0
-                        && toCoordinates.isNeighbour(board.actual)
-                        && (toCell.castle===0 || toCell.castle===board.getCell(board.actual).color)
-                        && board.connect(board.actual, toCoordinates, true) 
+                        && board.actual.isNeighbour(toCell)
+                        && (toCell.castle===0 || toCell.castle===board.actual.color)
+                        && board.actual.connect(toCell, true)
                     )
                 )
-            {
+            ) {
                 renderMain();
             }
         }
@@ -105,12 +107,12 @@ delegate(boardTable, "mouseover", "td", tdMouseOver);
 
 function saveButtonClick() {
     if (difficulty) {
-        const loadedSquares = loadBoard(difficulty);
-        if (loadedSquares) {
-            const loadedBoard=new Board(0);
-            loadedBoard.squares=loadedSquares;
+        const savedSquares = loadBoard(difficulty);
+        if (savedSquares) {
+            const savedBoard=new Board(0);
+            savedBoard.squares=savedSquares;
             renderBoard(board, actualPreview);
-            renderBoard(loadedBoard, savedPreview);
+            renderBoard(savedBoard, savedPreview);
             showCheckSave();
         } else {
             saveBoard(difficulty, board);
@@ -133,7 +135,7 @@ function showCheckSave(show=true) {
 
 function loadButtonClick() {
     if (difficulty) {
-        const loadedSquares = loadBoard(difficulty);
+        const loadedSquares = loadBoard(difficulty, board);
         if (loadedSquares) {
             board.squares = loadedSquares;
             renderMain();
