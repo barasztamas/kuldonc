@@ -83,7 +83,6 @@ function tdMouseOver(event) {
         const toTd = event.target.closest("#board td");
         if (toTd) {
             const toCell = board.getSquare(toTd);
-            console.log(toCell, board.actual);
             if (
                 toCell &&
                 (
