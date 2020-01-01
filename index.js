@@ -63,12 +63,12 @@ function windowMouseUp(event) {
         if (
             !event.target.closest || //mouse outside window
             !event.target.closest("#board td") || //mouse outside board
-            board.actual !== board.getSquare(event.target.closest("#board td")) || //mouse not over actual cell
+            board.actual !== board.getSquare(event.target.closest("#board td")) || //mouse not over actual cell or no actual cell
             actualCell.color !== actualCell.castle || //actual cell not a castle
             !(actualCell.left||actualCell.right||actualCell.top||actualCell.bottom) //actual cell has no connections (is starting castle)
         ) {
             board.removeLine(actualCell.color);
-        } //otherwise
+        } //in every case
         board.actual = null;
         renderMain();
     }
