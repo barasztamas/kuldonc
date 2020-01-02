@@ -16,18 +16,25 @@ div.right {
 #success {
     color: red;
 }
+nav li {
+    display: inline;
+    white-space: nowrap;
+    margin-right: 1em;
+}
+nav li a {
+    text-decoration: none;
+    color: black;
+}
 
 /*board and preview tables*/
 table {
     border-collapse: collapse;
     display: inline-block;
 }
-td {
-    background-color: lightgrey;
-}
 #board td {
     width: 40px;
     height: 40px;
+    background-color: lightgrey;
     border-color: white;
     border-width: 1px;
     border-style: solid;
