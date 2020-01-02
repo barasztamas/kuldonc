@@ -1,0 +1,47 @@
+<?php
+
+// adatok fájlba / adatbázisba
+// fájl tárolás tipikusan serialize (php saját) vagy JSON
+// ha elég a JSON, az jobb
+// serialize kell ha pld objektum-típust is tárolni akarok
+
+class FileStorage {
+    private $path;
+    private $contents;
+
+    public function __construct($path)
+    {
+        if (!file_exists($path)) {
+            touch($path);
+            file_put_contents($path, "[]");
+        }
+
+        if (!is_readable($path) || !is_writeable($path)) {
+            throw new Exception("Storage file ${path} does not exist or invalid permissions!");
+        }
+
+        $this->path = realpath($path);
+        $file_contents = file_get_contents($this->path);
+        $this->contents = json_decode($file_contents, TRUE);
+
+        if (!is_array($this->contents)) {
+            throw new Exception("Invalid storage file format!");
+        }
+    }
+
+    public function add($value)
+    {
+        $this->contents[] = $value;
+    }
+    public function getContents()
+    {
+        return $this->contents;
+    }
+
+    public function __destruct()
+    {
+        $file_contents = json_encode($this->contents, JSON_PRETTY_PRINT);
+        file_put_contents($this->path, $file_contents);
+    }
+
+}

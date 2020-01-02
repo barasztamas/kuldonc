@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<?php
+require_once("_init.php");
+?>
+<?php require("partials/header.php"); ?>
     
     <div id = "difficulty">
         <button id="easy"       class="difficulty"> Könnyű     </button>
@@ -48,4 +46,4 @@
     <br/>Az Eötvös Loránd Tudományegyetem Hallgatói Követelményrendszere (ELTE szervezeti és működési szabályzata, II. Kötet, 74/C. §) kimondja, hogy mindaddig, amíg egy hallgató egy másik hallgató munkáját - vagy legalábbis annak jelentős részét - saját munkájaként mutatja be, az fegyelmi vétségnek számít. A fegyelmi vétség legsúlyosabb következménye a hallgató elbocsátása az egyetemről.
 
     <script src="index.js" type="module"></script>
-</body>
+<?php require("partials/footer.php"); ?>
