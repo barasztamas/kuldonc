@@ -1,9 +1,9 @@
-import { delegate } from "./utils.js";
-import { renderBoard } from "./render.js";
-import { Board } from "./board.js";
-import { Square } from "./square.js";
-import * as settings from "./settings.js";
-import { saveBoard, loadBoard } from "./storage.js";
+import { delegate } from "./js/utils.js";
+import { renderBoard } from "./js/render.js";
+import { Board } from "./js/board.js";
+import { Square } from "./js/square.js";
+import * as settings from "./js/settings.js";
+import { saveBoard, loadBoard } from "./js/storage.js";
 
 export const boardTable = document.querySelector("table#board");
 export let board = new Board(0);
