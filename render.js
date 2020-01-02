@@ -7,14 +7,14 @@ import { Square } from "./square.js";
  */
 function renderSquare(square) {
     return `<td class="
-        ${square.color  ? `c${square.color} line`   : ""}
-        ${square.actual ? "actual"                  : ""}
-        ${square.left   ? "left"                    : ""}
-        ${square.right  ? "right"                   : ""}
-        ${square.top    ? "top"                     : ""}
-        ${square.bottom ? "bottom"                  : ""}
-        ${square.castle ? "castle"                  : ""}
-    ">  ${square.castle ? square.castle             : ""}</td>`;
+        ${square.color  ? `c${square.color % 10} line`  : ""}
+        ${square.actual ? "actual"                      : ""}
+        ${square.left   ? "left"                        : ""}
+        ${square.right  ? "right"                       : ""}
+        ${square.top    ? "top"                         : ""}
+        ${square.bottom ? "bottom"                      : ""}
+        ${square.castle ? "castle"                      : ""}
+    ">  ${square.castle ? square.castle                 : ""}</td>`;
 }
 /**
  * @param {Board} board

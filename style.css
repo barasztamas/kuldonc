@@ -31,10 +31,12 @@ table {
     border-collapse: collapse;
     display: inline-block;
 }
+td{
+    background-color: lightgrey;
+}
 #board td {
     width: 40px;
     height: 40px;
-    background-color: lightgrey;
     border-color: white;
     border-width: 1px;
     border-style: solid;
@@ -94,5 +96,4 @@ td.c6   {background-color: crimson;}
 td.c7   {background-color: darkmagenta;     color: white;}
 td.c8   {background-color: darkolivegreen;  color: white;}
 td.c9   {background-color: gray;            color: white;}
-td.c10  {background-color: maroon;          color: white;}
-td.c11  {background-color: navy;            color: white;}
+td.c0   {background-color: maroon;          color: white;}
