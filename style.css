@@ -91,9 +91,9 @@ td.c1   {background-color: indianred;}
 td.c2   {background-color: lightseagreen;}
 td.c3   {background-color: goldenrod;}
 td.c4   {background-color: blueviolet;      color: white;}
-td.c5   {background-color: lawngreen;}
-td.c6   {background-color: crimson;}
+td.c5   {background-color: lightgreen;}
+td.c6   {background-color: crimson;         color: white;}
 td.c7   {background-color: darkmagenta;     color: white;}
-td.c8   {background-color: darkolivegreen;  color: white;}
+td.c8   {background-color: olivedrab;       color: white;}
 td.c9   {background-color: gray;            color: white;}
 td.c0   {background-color: maroon;          color: white;}
