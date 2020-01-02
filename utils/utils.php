@@ -40,10 +40,10 @@ function authorize($auth_type){
         redirect("login.php");
     }
     if ($auth_type & NOT_LOGGED_IN && is_logged_in()) {
-        redirect("index.php");
+        redirect("level_list.php");
     }
     if ($auth_type & ADMIN && $_SESSION["user"]!="admin@admin.hu") {
-        redirect("index.php");
+        redirect("level_list.php");
     }
 }
 

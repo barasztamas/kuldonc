@@ -31,15 +31,15 @@ table {
     border-collapse: collapse;
     display: inline-block;
 }
-td{
+td, th{
     background-color: lightgrey;
+    border-width: 1px;
+    border-style: solid;
 }
 #board td {
     width: 40px;
     height: 40px;
     border-color: white;
-    border-width: 1px;
-    border-style: solid;
     padding: 0px;
     text-align: center;
     border-radius: 10px;
