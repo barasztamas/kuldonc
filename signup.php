@@ -14,6 +14,9 @@ if (verify_post("email", "password", "fullname")) {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Invalid email format";
     }
+    if (array_find($users_store->getContents(), function($user)use($email){return $user["email"] === $email;})) {
+        $errors[] = "User already exists";
+    }
     if (strlen($password)<4) {
         $errors[] = "Password too short";
     }
