@@ -1,6 +1,11 @@
 import { Coordinates } from "./utils.js";
 
-export const size = {
+export const rows = {
+    easy : 5,
+    medium : 9,
+    hard : 9
+}
+export const cols = {
     easy : 5,
     medium : 9,
     hard : 9

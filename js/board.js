@@ -3,18 +3,19 @@ import { Square } from "./square.js";
 
 export class Board {
     /**
-     * @param  { Number } size
+     * @param  { Number } rows
+     * @param  { Number } cols
      * @param  { Coordinates[][] } castles
      */
-    constructor(size, castles){
+    constructor(rows, cols, castles){
         /** @type {Square} */
         this._actual = null;
         /** @type {Square[][]} */
         this.squares=[];
-        for (let rownum = 0; rownum < size; rownum++) {
+        for (let rownum = 0; rownum < rows; rownum++) {
             /** @type {Square[]} */
             const row=[];
-            for (let colnum = 0; colnum < size; colnum++) {
+            for (let colnum = 0; colnum < cols; colnum++) {
                 row.push(new Square(rownum, colnum, this));
             }
             this.squares.push(row);

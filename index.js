@@ -23,7 +23,7 @@ let difficulty = "";
  */
 function difficultyButtonClick() {
     difficulty = this.id;
-    board = new Board(settings.size[difficulty], settings.castles[difficulty]);
+    board = new Board(settings.rows[difficulty], settings.cols[difficulty], settings.castles[difficulty]);
     renderMain();
     showCheckSave(false);
     loadButton.disabled = !loadBoard(difficulty);
