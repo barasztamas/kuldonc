@@ -5,8 +5,8 @@ import { Square } from "./js/square.js";
 import * as settings from "./js/settings.js";
 import { saveBoard, loadBoard } from "./js/storage.js";
 
-export const boardTable = document.querySelector("table#board");
-export let board = new Board(0);
+const boardTable = document.querySelector("table#board");
+let board = new Board(0);
 
 const difficultyButtons =document.querySelector("#difficulty");
 const storageDiv = document.querySelector("#storage")
@@ -19,7 +19,7 @@ const successText = document.querySelector("#success");
 let difficulty = "";
 
 /**
- * @param  {HTMLButtonElement} button
+ * @this  {HTMLButtonElement} button
  */
 function difficultyButtonClick() {
     difficulty = this.id;
