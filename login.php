@@ -7,26 +7,19 @@ $users_store = new FileStorage("storage/users.json");
 
 $errors = [];
 
-function is_user_ok($email, $password)
-{
-    return function($user) use ($email, $password){
-        return  $user["email"] === $email &&
-                password_verify($password, $user["password"]);
-    };
-}
-
 if (verify_post("email", "password")) {
     $email = trim($_POST["email"]);
     $password = $_POST["password"];
 
-    $users = $users_store->getContents();
+    $user = $users_store->getItem($email);
 
-    if (!array_find($users, is_user_ok($email, $password))) {
+    if (!isset($user) || !password_verify($password, $user["password"])) {
         $errors[] = "Invalid username or password";
     }
 
     if (count($errors)===0) {
         $_SESSION["user"] = $email;
+        $_SESSION["fullname"] = $user["fullname"];
         redirect("index.php");
     }
 }
@@ -45,10 +38,5 @@ if (verify_post("email", "password")) {
     <br/>
     <button type="submit">Log in</button>
 </form>
-
-<?php foreach ($errors as $error): ?>
-    <div><?= $error ?></div>
-<?php endforeach; ?>
-
 
 <?php require("partials/footer.php"); ?>

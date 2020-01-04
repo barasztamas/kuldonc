@@ -32,6 +32,10 @@ function is_logged_in() {
     return isset($_SESSION["user"]);
 }
 
+function is_admin() {
+    return is_logged_in() && $_SESSION["user"]==="admin@admin.hu";
+}
+
 const LOGGED_IN = 1;
 const NOT_LOGGED_IN = 2;
 const ADMIN = 4;
@@ -40,10 +44,10 @@ function authorize($auth_type){
         redirect("login.php");
     }
     if ($auth_type & NOT_LOGGED_IN && is_logged_in()) {
-        redirect("level_list.php");
+        redirect("levels.php");
     }
-    if ($auth_type & ADMIN && $_SESSION["user"]!="admin@admin.hu") {
-        redirect("level_list.php");
+    if ($auth_type & ADMIN && !is_admin()) {
+        redirect("levels.php");
     }
 }
 

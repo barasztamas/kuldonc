@@ -31,7 +31,7 @@ if (verify_post("email", "password", "fullname")) {
             "fullname" => $fullname
         ];
 
-        $users_store->add($user);
+        $users_store->addItem($email, $user);
     }
 }
 
@@ -51,11 +51,6 @@ if (verify_post("email", "password", "fullname")) {
     <br/>
     <button type="submit">Sign up</button>
 </form>
-
-<?php foreach ($errors as $error): ?>
-    <div><?= $error ?></div>
-<?php endforeach; ?>
-
 
 
 <?php require("partials/footer.php"); ?>

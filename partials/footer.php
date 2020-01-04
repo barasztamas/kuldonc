@@ -1,3 +1,8 @@
+    <?php foreach ($errors ?? [] as $error): ?>
+        <div><?= $error ?></div>
+    <?php endforeach; ?>
+
+
     <br/>Bárász Tamás
     <br/>S8JPUQ
     <br/>Webprogramozás esti, Js beadandó, Küldöncök

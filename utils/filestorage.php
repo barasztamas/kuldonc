@@ -29,9 +29,17 @@ class FileStorage {
         }
     }
 
-    public function add($value)
+    public function addItem($key, $value)
     {
-        $this->contents[] = $value;
+        $this->contents[$key] = $value;
+    }
+    public function getItem($key)
+    {
+        return $this->contents[$key];
+    }
+    public function deleteItem($key)
+    {
+        unset($this->contents[$key]);
     }
     public function getContents()
     {
