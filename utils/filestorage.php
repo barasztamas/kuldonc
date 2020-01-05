@@ -35,7 +35,10 @@ class FileStorage {
     }
     public function getItem($key)
     {
-        return $this->contents[$key];
+        if (array_key_exists($key, $this->contents)) {
+            return $this->contents[$key];
+        }
+        return null;
     }
     public function deleteItem($key)
     {
@@ -48,7 +51,7 @@ class FileStorage {
 
     public function __destruct()
     {
-        $file_contents = json_encode($this->contents, JSON_PRETTY_PRINT);
+        $file_contents = json_encode($this->contents,JSON_PRETTY_PRINT+JSON_UNESCAPED_UNICODE);
         file_put_contents($this->path, $file_contents);
     }
 

@@ -1,0 +1,12 @@
+{
+    "abc@def.hu": {
+        "email": "abc@def.hu",
+        "password": "$2y$10$jCBQruXHG6o62cXBsyFdvOYfosmsPJFGYjeWfwlZbzcfNznrURlbC",
+        "fullname": "Abc"
+    },
+    "admin@admin.hu": {
+        "email": "admin@admin.hu",
+        "password": "$2y$10$Gl2l9AVFx85EiLVuSRB8weB59jBBzEyDTvY2KBk2bVu2teFSdvHXm",
+        "fullname": "admin"
+    }
+}

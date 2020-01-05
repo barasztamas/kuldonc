@@ -10,6 +10,8 @@ export class Board {
     constructor(rows, cols, castles){
         /** @type {Square} */
         this._actual = null;
+        /** @type {Square} */
+        this._actualStart = null;
         /** @type {Square[][]} */
         this.squares=[];
         for (let rownum = 0; rownum < rows; rownum++) {
@@ -48,9 +50,12 @@ export class Board {
         }
     }
     /**
-     * @param  {Square|false} square
+     * @param  {Square} square
      */
     set actual(square) {
+        if (square && !this._actual) {
+            this._actualStart=square;
+        }
         if (this._actual) {
             this._actual.actual = false;
         }
@@ -59,6 +64,7 @@ export class Board {
             this._actual = square;
         } else {
             this._actual = null;
+            this._actualStart = null;
         }
     }
     get actual(){
@@ -70,10 +76,10 @@ export class Board {
      * @returns {Square}
      */
     getSquare(param) {
-        if (param instanceof Coordinates) {
-            return this.squares[param.row][param.col];
-        } else if ("cellIndex" in param) {
+        if ("cellIndex" in param && "parentNode" in param && "rowIndex" in param.parentNode) {
             return this.squares[param.parentNode.rowIndex][param.cellIndex];
+        } else if (param instanceof Coordinates || ("row" in param && "col" in param)) {
+            return this.squares[param.row][param.col];
         }
     }
 

@@ -6,7 +6,7 @@ import * as settings from "./js/settings.js";
 import { saveBoard, loadBoard } from "./js/storage.js";
 
 const boardTable = document.querySelector("table#board");
-let board = new Board(0);
+let board = new Board(0,0);
 
 const difficultyButtons =document.querySelector("#difficulty");
 const storageDiv = document.querySelector("#storage")
@@ -63,9 +63,9 @@ function windowMouseUp(event) {
         if (
             !event.target.closest || //mouse outside window
             !event.target.closest("#board td") || //mouse outside board
-            board.actual !== board.getSquare(event.target.closest("#board td")) || //mouse not over actual cell or no actual cell
+            board.actual !== board.getSquare(event.target.closest("#board td")) || //mouse not over actual cell
             actualCell.color !== actualCell.castle || //actual cell not a castle
-            !(actualCell.left||actualCell.right||actualCell.top||actualCell.bottom) //actual cell has no connections (is starting castle)
+            actualCell === board._actualStart //actual cell is starting cell
         ) {
             board.removeLine(actualCell.color);
         } //in every case
