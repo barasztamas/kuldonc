@@ -25,6 +25,9 @@ nav li a {
     text-decoration: none;
     color: black;
 }
+#levels td, #levels th{
+    padding: 10px;
+}
 
 /*board and preview tables*/
 table {
@@ -35,14 +38,14 @@ td, th{
     background-color: lightgrey;
     border-width: 1px;
     border-style: solid;
-}
-#board td {
-    width: 40px;
-    height: 40px;
     border-color: white;
     padding: 0px;
     text-align: center;
     border-radius: 10px;
+}
+#board td {
+    width: 40px;
+    height: 40px;
 }
 table.preview{
     border-width: 1px;
@@ -52,6 +55,7 @@ table.preview td{
     width: 20px;
     height: 20px;
     border-width: 0px;
+    border-radius: 0px;
     padding: 0px;
     color: transparent;
     user-select: none;
