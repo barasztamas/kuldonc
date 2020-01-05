@@ -10,7 +10,6 @@ if (verify_get("level_name")) {
 }
 if (!isset($level)){
     $errors[] = "level missing";
-    //redirect("levels.php");
 }
 
 ?>

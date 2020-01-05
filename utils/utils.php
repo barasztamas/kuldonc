@@ -44,10 +44,10 @@ function authorize($auth_type){
         redirect("login.php");
     }
     if ($auth_type & NOT_LOGGED_IN && is_logged_in()) {
-        redirect("levels.php");
+        redirect("index.php");
     }
     if ($auth_type & ADMIN && !is_admin()) {
-        redirect("levels.php");
+        redirect("index.php");
     }
 }
 
