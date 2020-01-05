@@ -11,7 +11,7 @@ if (verify_post("level_name", "difficulty", "squares", "coordinates")) {
     $levels_store=new Filestorage("storage/levels.json");
     
     if ($levels_store->getItem($level_name)!==null) {
-        $errors[] = "Level with this name exists already!";
+        $errors[] = "Level with this name exists already! Rename and save again!";
     } 
     if(empty($errors)) {
         $squares = json_decode($squares_data);
@@ -41,9 +41,9 @@ if (verify_post("level_name", "difficulty", "squares", "coordinates")) {
     <input type="number" name="difficulty" min="1" max="4" step="1" required value="<?= empty($errors) ? '' : $difficulty ?>" />
     <br/>
     Size:
-    <input type="number" name="rows" id="rows" min="2" />
+    <input type="number" name="rows" id="rows" min="2" value="<?= empty($errors) ? '' : $rows ?>" />
     *
-    <input type="number" name="cols" id="cols" min="2" />
+    <input type="number" name="cols" id="cols" min="2" value="<?= empty($errors) ? '' : $cols ?>" />
     <br/>
     <textarea name="squares" id="squares" hidden required></textarea>
     <textarea name="coordinates" id="coordinates" hidden required></textarea>
@@ -55,8 +55,8 @@ if (verify_post("level_name", "difficulty", "squares", "coordinates")) {
 </form>
 
 <script type="text/javascript">
-    const squaresData ="<?= empty($errors) ? '' : $squares_data ?>";
-    const coordinatesData ="<?= empty($errors) ? '' : $coordinates_data ?>";
+    const squaresData ='<?= empty($errors) ? '' : addslashes($squares_data) ?>';
+    const coordinatesData ='<?= empty($errors) ? '' : addslashes($coordinates_data) ?>';
 </script>
 <script src="add_level.js" type="module"></script>
 <?php require("partials/footer.php"); ?>

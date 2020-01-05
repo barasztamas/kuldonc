@@ -2,36 +2,14 @@ import { delegate } from "./js/utils.js";
 import { renderBoard } from "./js/render.js";
 import { Board } from "./js/board.js";
 import { Square } from "./js/square.js";
-import { parseBoard, stringifySquares } from "./js/storage.js";
+import { parseBoard } from "./js/storage.js";
 
 const boardTable = document.querySelector("table#board");
-const rowsInput = document.querySelector("input#rows");
-const colsInput = document.querySelector("input#cols");
-const squaresInput = document.querySelector("#squares");
-const coordinatesInput = document.querySelector("#coordinates");
-const saveButton = document.querySelector("button#save");
+const successText = document.querySelector("#success");
 
-let board = new Board(0,0);
-/** @type {Coordinates[][]} */
-let castleCoordinates = [];
-let maxColor = 0;
-
-if (squaresData && coordinatesData) {
-    const squares = parseBoard(squaresData, board);
-    rowsInput.value = squares.length;
-    colsInput.value = squares[0].length;
-    board.squares = squares;
-    castleCoordinates = JSON.parse(coordinatesData);
-    maxColor = castleCoordinates.reduce((acc, curr) => Math.max(acc, curr[0].color), 0);
-    renderMain();
-}
-
-function rowColChange() {
-    board = new Board(parseInt(rowsInput.value), parseInt(colsInput.value));
-    renderMain();
-}
-rowsInput.addEventListener("change", rowColChange);
-colsInput.addEventListener("change", rowColChange);
+const levelSettings = JSON.parse(levelData);
+const board = new Board(levelSettings.rows, levelSettings.cols, levelSettings.coordinates);
+renderMain();
 
 /**
  * @param  {Event} event
@@ -41,13 +19,13 @@ function tdMouseDown(event) {
         /** @type {Square} */
         const cell = board.getSquare(this);
         if (event.button===0) {
-            if (!cell.color) {
+            if (cell.castle) {
+                board.removeLine(cell.castle);
                 board.actual = cell;
-                cell.color = ++maxColor;
+                cell.color = cell.castle;
                 renderMain();
             }
         } else if (event.button===2) {
-            castleCoordinates = castleCoordinates.filter((elem) => elem[0].color!==cell.color);
             board.removeLine(cell.color);
             renderMain();
         }
@@ -67,13 +45,11 @@ function windowMouseUp(event) {
             !event.target.closest || //mouse outside window
             !event.target.closest("#board td") || //mouse outside board
             board.actual !== board.getSquare(event.target.closest("#board td")) || //mouse not over actual cell
-            actualCell === board._actualStart //actual cell is starting cell
+            actualCell.color !== actualCell.castle || //actual cell not a castle
+            !(actualCell.left||actualCell.right||actualCell.top||actualCell.bottom) //actual cell has no connections (is starting castle)
         ) {
             board.removeLine(actualCell.color);
-            --maxColor;
-        } else {
-            castleCoordinates.push([board._actualStart, actualCell]);
-        }
+        } //in every case
         board.actual = null;
         renderMain();
     }
@@ -97,6 +73,7 @@ function tdMouseOver(event) {
                     ) || (
                         toCell.color===0
                         && board.actual.isNeighbour(toCell)
+                        && (toCell.castle===0 || toCell.castle===board.actual.color)
                         && board.actual.connect(toCell, true)
                     )
                 )
@@ -108,10 +85,7 @@ function tdMouseOver(event) {
 }
 delegate(boardTable, "mouseover", "td", tdMouseOver);
 
-
 function renderMain() {
-    squaresInput.value = stringifySquares(board.squares);
-    coordinatesInput.value = JSON.stringify(castleCoordinates, ["row","col","color"]);
     renderBoard(board, boardTable);
-    saveButton.disabled = !board || !!board.actual || !board.isFull();
+    successText.hidden = !board || !!board.actual || !board.isFull();
 }

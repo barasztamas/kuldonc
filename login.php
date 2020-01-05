@@ -5,8 +5,6 @@ authorize(NOT_LOGGED_IN);
 $users_store = new FileStorage("storage/users.json");
 
 
-$errors = [];
-
 if (verify_post("email", "password")) {
     $email = trim($_POST["email"]);
     $password = $_POST["password"];

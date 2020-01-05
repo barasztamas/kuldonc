@@ -14,7 +14,7 @@ $levels_store=new Filestorage("storage/levels.json");
             </tr>
             <?php foreach ($levels_store->getContents() as $level) : ?>
                 <tr>
-                    <td><a href="game.php?level=<?= $level["name"] ?>"></a><?= $level["name"] ?></td>
+                    <td><a href="game.php?level_name=<?= $level["level_name"] ?>"><?= $level["level_name"] ?></a></td>
                     <td><?= $level["difficulty"] ?></td>
                 </tr>
             <?php endforeach; ?>
