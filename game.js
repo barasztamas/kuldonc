@@ -46,7 +46,7 @@ function windowMouseUp(event) {
             !event.target.closest("#board td") || //mouse outside board
             board.actual !== board.getSquare(event.target.closest("#board td")) || //mouse not over actual cell
             actualCell.color !== actualCell.castle || //actual cell not a castle
-            !(actualCell.left||actualCell.right||actualCell.top||actualCell.bottom) //actual cell has no connections (is starting castle)
+            actualCell === board._actualStart //actual cell is starting castle
         ) {
             board.removeLine(actualCell.color);
         } //in every case
@@ -87,5 +87,11 @@ delegate(boardTable, "mouseover", "td", tdMouseOver);
 
 function renderMain() {
     renderBoard(board, boardTable);
+    if (board && board.actual && board.isFull()) {
+        successText.hidden = true;
+        fetch("api/level_solved.php?level_name=" + levelSettings.level_name);
+    } else {
+        successText.hidden = false;
+    }
     successText.hidden = !board || !!board.actual || !board.isFull();
 }

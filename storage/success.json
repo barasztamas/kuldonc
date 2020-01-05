@@ -1,0 +1,9 @@
+{
+    "Könnyű": {
+        "abc@def.hu": 1,
+        "admin@admin.hu": 1
+    },
+    "Közepes": {
+        "abc@def.hu": 1
+    }
+}
