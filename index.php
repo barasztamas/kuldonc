@@ -3,7 +3,9 @@ require_once("_init.php");
 
 $levels_store=new Filestorage("storage/levels.json");
 $success_store=new FileStorage("storage/success.json");
-$user=$_SESSION["user"];
+if (is_logged_in()) {
+    $user=$_SESSION["user"];
+}
 ?>
 <?php require("partials/header.php"); ?>
 

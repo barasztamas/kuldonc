@@ -25,7 +25,7 @@ nav li a {
     text-decoration: none;
     color: black;
 }
-#levels td, #levels th{
+#levels td, #levels th, #saved td, #saved th{
     padding: 10px;
 }
 

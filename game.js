@@ -11,6 +11,31 @@ const levelSettings = JSON.parse(levelData);
 const board = new Board(levelSettings.rows, levelSettings.cols, levelSettings.coordinates);
 renderMain();
 
+const savedTable = document.querySelector("table#saved");
+if (savedTable) {
+    const saveButton = savedTable.querySelector("th");
+    const savedList = parseBoard(savedData);
+    for (const date in savedList) {
+        const element = savedList[date]["squares"];
+        const previewTable = savedTable.querySelector(`tr[data-id="${date}"] table.preview`);
+        const previewBoard = new Board(0);
+        previewBoard.squares = element;
+        renderBoard(previewBoard, previewTable);
+    }
+    async function saveGameClick(){
+        if (!board.actual) {
+            
+            const response = await fetch("api/save_game.php");
+            if (response.ok) {
+                
+            }
+        }
+
+    }
+
+}
+
+
 /**
  * @param  {Event} event
  */

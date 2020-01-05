@@ -36,6 +36,16 @@ function is_admin() {
     return is_logged_in() && $_SESSION["user"]==="admin@admin.hu";
 }
 
+function isValidJSON($str) {
+    if (strlen($str)>0) {
+        json_decode($str);
+        return json_last_error() == JSON_ERROR_NONE;
+    } else {
+        return false;
+    }
+    
+}
+
 const LOGGED_IN = 1;
 const NOT_LOGGED_IN = 2;
 const ADMIN = 4;
