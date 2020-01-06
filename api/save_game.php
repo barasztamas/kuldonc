@@ -17,21 +17,25 @@ if (!isValidJSON($json_data)) {
     exit();
 }
 
-$time = time();
 $game_data = json_decode($json_data);
-$level_name = $game_data["level_name"];
-$squares = $game_data["squares"];
+if (!property_exists($game_data, "level_name") || !property_exists($game_data, "squares")) {
+    http_response_code(400);
+    print("null");
+    exit();
+}
+$time = time();
 $user = $_SESSION["user"];
+$game_array = [
+    "level_name"    => $game_data->level_name,
+    "squares"       => $game_data->squares,
+    "time"          => $time,
+    "user"          => $user
+];
 
 $saved_store=new Filestorage("../storage/saved.json");
 $saved_store->addItem(
-            $time,
-            [
-                time => $time,
-                user => $user,
-                level_name => $level_name,
-                squares => $squares,
-            ]
+            $time . "|" . $user . "|" . $game_array["level_name"],
+            $game_array
         );
 
-print($time);
+print(json_encode($game_array));

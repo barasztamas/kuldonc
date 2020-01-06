@@ -1,8 +1,8 @@
-import { delegate } from "./js/utils.js";
+import { delegate, dateToString } from "./js/utils.js";
 import { renderBoard } from "./js/render.js";
 import { Board } from "./js/board.js";
 import { Square } from "./js/square.js";
-import { parseBoard } from "./js/storage.js";
+import { parseBoard, stringifySquares } from "./js/json.js";
 
 const boardTable = document.querySelector("table#board");
 const successText = document.querySelector("#success");
@@ -13,26 +13,57 @@ renderMain();
 
 const savedTable = document.querySelector("table#saved");
 if (savedTable) {
-    const saveButton = savedTable.querySelector("th");
-    const savedList = parseBoard(savedData);
-    for (const date in savedList) {
-        const element = savedList[date]["squares"];
-        const previewTable = savedTable.querySelector(`tr[data-id="${date}"] table.preview`);
+    const saveRow = savedTable.querySelector("th");
+    const savedList = JSON.parse(savedData);
+    console.log(savedList);
+    
+    const savedListFormatted ={};
+    for (const key in savedList) {
+        const squares = savedList[key].squares;
+        const time = savedList[key].time;
+        const previewTable = savedTable.querySelector(`tr[data-id="${time}"] table.preview`);
         const previewBoard = new Board(0);
-        previewBoard.squares = element;
+        previewBoard.squares = squares;
         renderBoard(previewBoard, previewTable);
+        savedListFormatted[time] = savedList[key];
     }
     async function saveGameClick(){
         if (!board.actual) {
-            
-            const response = await fetch("api/save_game.php");
+            const msgBody = {
+                level_name: levelSettings.level_name,
+                squares: board.squares
+            }
+            const response = await fetch(
+                "api/save_game.php",
+                {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: stringifySquares(msgBody)
+                }
+            );
             if (response.ok) {
-                
+                const savedJson = await response.text();
+                const savedGame = JSON.parse(savedJson, board);
+                const savedTime = savedGame.time;
+                const newTr = document.createElement("tr");
+                newTr.dataset.id = savedTime;
+                newTr.innerHTML = `<td>${dateToString(new Date(savedTime * 1000))}</td><td><table class='preview'></table></td>`;
+                renderBoard(savedGame, newTr.querySelector("table.preview"));
+                savedTable.querySelector("tbody").insertAdjacentElement("afterbegin", newTr);
+                savedListFormatted[savedTime] = savedGame;
             }
         }
-
     }
+    saveRow.addEventListener("click", saveGameClick);
 
+    function savedGameClick(){
+        board.squares = parseBoard(JSON.stringify(savedListFormatted[this.dataset.id].squares), board);
+        renderMain();
+    }
+    delegate(savedTable, "click", "tr[data-id]", savedGameClick);
 }
 
 

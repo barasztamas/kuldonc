@@ -48,6 +48,10 @@ class FileStorage {
     {
         return $this->contents;
     }
+    public function getFilteredContents($function)
+    {
+        return array_filter($this->contents, $function);
+    }
 
     public function __destruct()
     {

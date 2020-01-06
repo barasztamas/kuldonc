@@ -9,14 +9,6 @@ export function stringifySquares(squares) {
 }
 
 /**
- * @param  {Board} board
- * @param  {String} difficulty
- */
-export function saveBoard(difficulty, board) {
-    localStorage.setItem(difficulty, stringifyBoard(board.squares));
-}
-
-/**
  * @param  {String} json
  * @param  {Board} board
  * @returns {Square[][]}
@@ -33,12 +25,4 @@ export function parseBoard(json, board = null) {
     } else {
         return JSON.parse(json);
     }
-}
-/**
- * @param  {String} difficulty
- * @param  {Board} board
- * @returns {Square[][]}
- */
-export function loadBoard(difficulty, board = null) {
-    return parseBoard(localStorage.getItem(difficulty), board);
 }

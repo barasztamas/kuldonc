@@ -25,7 +25,7 @@ nav li a {
     text-decoration: none;
     color: black;
 }
-#levels td, #levels th, #saved td, #saved th{
+#levels>tr>td, #levels>tr>th, #saved>tr>td, #saved>tr>th{
     padding: 10px;
 }
 
@@ -52,8 +52,8 @@ table.preview{
     border-style: solid;
 }
 table.preview td{
-    width: 20px;
-    height: 20px;
+    width: 5px;
+    height: 5px;
     border-width: 0px;
     border-radius: 0px;
     padding: 0px;

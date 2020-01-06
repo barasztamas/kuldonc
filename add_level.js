@@ -2,7 +2,7 @@ import { delegate } from "./js/utils.js";
 import { renderBoard } from "./js/render.js";
 import { Board } from "./js/board.js";
 import { Square } from "./js/square.js";
-import { parseBoard, stringifySquares } from "./js/storage.js";
+import { parseBoard, stringifySquares } from "./js/json.js";
 
 const boardTable = document.querySelector("table#board");
 const rowsInput = document.querySelector("input#rows");

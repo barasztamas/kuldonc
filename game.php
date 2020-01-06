@@ -9,7 +9,7 @@ if (verify_get("level_name")) {
     if (is_logged_in()) {
         $user = $_SESSION["user"];
         $saved_store = new FileStorage("storage/saved.json");
-        $saved = array_filter($saved_store->getContents(), function($val){return $val["user"]===$user && $val["level_name"]===$level_name;});
+        $saved = $saved_store->getFilteredContents(function($val) use ($user, $level_name) {return $val["user"]===$user && $val["level_name"]===$level_name;});
     }
     
 }
@@ -28,17 +28,21 @@ if (!isset($level)){
         <br/>
         <?php if(is_logged_in()) : ?>
             <table id="saved">
-                <tr>
-                    <th colspan="2">Save your game</th>
-                </tr>
-                <?php if(!empty($saved)) : ?>
-                    <?php foreach(array_reverse($saved) as $time => $val) : ?>
-                        <tr data-id="<?= $time ?>">
-                            <td><?= date("Y-m-d H:i:s", $time) ?></td>
-                            <td><table class="preview"></table></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                <thead>
+                    <tr>
+                        <th colspan="2">Save your game</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if(!empty($saved)) : ?>
+                        <?php foreach(array_reverse($saved) as $val) : ?>
+                            <tr data-id="<?= $val["time"] ?>">
+                                <td><?= date("Y-m-d H:i:s", $val["time"]) ?></td>
+                                <td><table class="preview"></table></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
             </table>
         <?php endif; ?>
     </div>
